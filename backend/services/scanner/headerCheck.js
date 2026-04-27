@@ -1,18 +1,18 @@
 const axios = require("axios");
 const { createFinding } = require("./helpers");
 
-const runHeaderCheck = async (targetUrl) => {
+const runHeaderCheck = async ({ normalizedTarget }) => {
   const findings = [];
   const checks = { headers: "passed" };
   const scannedPaths = [];
 
   try {
-    const response = await axios.get(targetUrl, {
+    const response = await axios.get(normalizedTarget, {
       timeout: 8000,
       validateStatus: () => true,
     });
 
-    scannedPaths.push(new URL(targetUrl).pathname || "/");
+    scannedPaths.push(new URL(normalizedTarget).pathname || "/");
 
     const headers = response.headers || {};
 
@@ -32,7 +32,7 @@ const runHeaderCheck = async (targetUrl) => {
             severity: "medium",
             title,
             evidence: `${name} header was not present`,
-            endpoint: targetUrl,
+            endpoint: normalizedTarget,
             remediation: `Set the ${name} header with a secure value.`,
           }),
         );

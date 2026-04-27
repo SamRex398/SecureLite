@@ -1,12 +1,12 @@
 const axios = require("axios");
 const { createFinding } = require("./helpers");
 
-async function runHttpsCheck(targetUrl) {
+async function runHttpsCheck({ normalizedTarget }) {
   const findings = [];
   const checks = { https: "passed" };
   const scannedPaths = [];
 
-  const parsed = new URL(targetUrl);
+  const parsed = new URL(normalizedTarget);
   const httpsUrl = `https://${parsed.host}${parsed.pathname}${parsed.search}`;
   const httpUrl = `http://${parsed.host}${parsed.pathname}${parsed.search}`;
 

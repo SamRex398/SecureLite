@@ -68,12 +68,12 @@ function looksLikeAdminPage(body) {
   );
 }
 
-async function runSensitivePathsCheck(targetUrl) {
+async function runSensitivePathsCheck({ normalizedTarget }) {
   const findings = [];
   const checks = { sensitivePaths: "passed" };
   const scannedPaths = [];
 
-  const base = new URL(targetUrl);
+  const base = new URL(normalizedTarget);
 
   for (const path of PATHS) {
     const testUrl = `${base.origin}${path}`;

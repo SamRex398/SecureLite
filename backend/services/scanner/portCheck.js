@@ -1,8 +1,5 @@
 const net = require("net");
 const { createFinding } = require("./helpers");
-const { host, port } = require("../../config/redis");
-const { type } = require("os");
-const { title } = require("process");
 
 const checkPort = (host, port, timeout = 3000) => {
   return new Promise((resolve) => {
@@ -29,12 +26,15 @@ const checkPort = (host, port, timeout = 3000) => {
   });
 };
 
-const runPortCheck = async (targetUrl) => {
+const runPortCheck = async ({ host }) => {
   const findings = [];
-  const checks = { port: "passed" };
+  const checks = { ports: "passed" };
   const scannedPaths = [];
 
-  const host = new URL(targetUrl).hostname;
+  if (!host) {
+    checks.ports = "not_applicable";
+    return { findings, checks, scannedPaths };
+  }
 
   const port80Open = await checkPort(host, 80);
   const port443Open = await checkPort(host, 443);
@@ -49,7 +49,7 @@ const runPortCheck = async (targetUrl) => {
         title: "Port 80 is closed or unreachable",
         evidence: "TCP connection to port 80 failed",
         endpoint: host,
-        remediation: "No action needed unless HTTP access is expect",
+        remediation: "No action needed unless HTTP access is expected.",
       }),
     );
   }
@@ -69,7 +69,7 @@ const runPortCheck = async (targetUrl) => {
   }
 
   if (findings.length > 0) {
-    checks.port = "issues_found";
+    checks.ports = "issues_found";
   }
 
   return { findings, checks, scannedPaths };
