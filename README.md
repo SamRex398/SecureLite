@@ -1,11 +1,11 @@
-# VScanner
+# SecureLite Scanner
 
-**VScanner** is a lightweight web vulnerability scanning platform built for fast security triage.  
+**SecureLite Scanner** is a lightweight web vulnerability scanning platform built for fast security triage.  
 It allows users to submit a target URL, run asynchronous security checks in the background, and review findings through a modern dashboard with severity breakdowns, risk scoring, scan history, and remediation guidance.
 
 ---
 
-## Why VScanner?
+## Why SecureLite Scanner?
 
 Security teams and builders often need a quick first-pass view of a public-facing target before deeper manual assessment. VScanner is designed for that exact moment.
 
