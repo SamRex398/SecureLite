@@ -7,7 +7,7 @@ It allows users to submit a target URL, run asynchronous security checks in the 
 
 ## Why SecureLite Scanner?
 
-Security teams and builders often need a quick first-pass view of a public-facing target before deeper manual assessment. VScanner is designed for that exact moment.
+Security teams and builders often need a quick first-pass view of a public-facing target before deeper manual assessment. SecureLite Scanner is designed for that exact moment.
 
 It helps answer:
 
@@ -18,13 +18,13 @@ It helps answer:
 - Are there signs of injection vulnerabilities?
 - Are core web ports reachable?
 
-VScanner transforms these checks into a structured, queue-driven workflow with clear and actionable output.
+SecureLite Scanner transforms these checks into a structured, queue-driven workflow with clear and actionable output.
 
 ---
 
 ## Core Value Proposition
 
-VScanner combines three essential qualities:
+SecureLite Scanner combines three essential qualities:
 
 - **Speed** → Queue scans instantly and process asynchronously  
 - **Clarity** → Convert raw checks into findings, severity counts, and risk bands  
@@ -36,7 +36,7 @@ VScanner combines three essential qualities:
 
 ### Security Checks
 
-VScanner runs multiple automated checks:
+SecureLite Scanner runs multiple automated checks:
 
 #### Injection Check
 - Tests query parameters with basic payloads  
@@ -226,7 +226,7 @@ npm run dev
 
 ```env
 PORT=6050
-Db_Url=mongodb://localhost:27017/vscanner
+Db_Url=mongodb://localhost:27017/SecureLite Scanner
 REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
 REDIS_PASSWORD=
@@ -264,5 +264,5 @@ VITE_API_BASE_URL=http://localhost:6050
 
 ## Final Note
 
-VScanner is built for **speed, clarity, and extensibility**.  
+SecureLite Scanner is built for **speed, clarity, and extensibility**.  
 It’s not trying to replace enterprise scanners… it’s the sharp, fast scout that tells you *where to look next*.
