@@ -8,7 +8,7 @@ const scanRoutes = require("./routes/scanRoutes");
 
 const app = express();
 
-const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173"||"https://samrex398.github.io")
+const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173"||"https://securelite-2.onrender.com")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
