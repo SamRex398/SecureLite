@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ||  "https://securelite.onrender.com").replace(/\/$/, "");
 
 const severityStyles = {
   critical: "bg-rose-500/15 text-rose-200 ring-1 ring-rose-400/40",

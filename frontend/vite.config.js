@@ -3,15 +3,16 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: "/securelite-frontend/",
   server: {
     port: 5173,
     proxy: {
       "/scan": {
-        target: "http://localhost:5000",
+        target: "https://securelite.onrender.com",
         changeOrigin: true,
       },
       "/health": {
-        target: "http://localhost:5000",
+        target: "https://securelite.onrender.com",
         changeOrigin: true,
       },
     },
