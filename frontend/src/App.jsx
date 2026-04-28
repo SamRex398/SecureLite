@@ -381,50 +381,7 @@ export default function App() {
       <div className="pointer-events-none absolute left-0 top-80 h-72 w-72 rounded-full bg-cyan-300/8 blur-[120px]" />
 
       <div className="mx-auto flex min-h-screen w-full max-w-[1440px] flex-col px-4 py-8 sm:px-6 lg:px-8 xl:px-10">
-        <header className="grid gap-8 xl:grid-cols-[minmax(0,1.45fr)_380px]">
-          <Panel
-            eyebrow="Threat Exposure Console"
-            title="Security scanning that reads like a real analyst workspace"
-            action={
-              <div className="inline-flex items-center gap-3 rounded-full border border-cyan-300/25 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-100">
-                <span className="h-2.5 w-2.5 rounded-full bg-cyan-300 animate-pulse" />
-                {health.status}
-              </div>
-            }
-            className="relative overflow-hidden"
-          >
-            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-cyan-300/10 blur-3xl" />
-            <div className="relative">
-              <p className="max-w-3xl text-lg leading-8 text-slate-300">
-                Queue URL, hostname, and public IP targets, inspect web and network posture side-by-side,
-                and walk judges through findings, CVE matches, recommendations, and exportable reports without leaving one screen.
-              </p>
-
-              <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                {statItems.map((item) => (
-                  <StatCard key={item.label} label={item.label} value={item.value} tone={item.tone} />
-                ))}
-              </div>
-            </div>
-          </Panel>
-
-
-
-          <Panel eyebrow="Operations Snapshot" title="Live posture">
-            <div className="space-y-4">
-              <div className="rounded-3xl border border-white/10 bg-slate-950/35 p-5">
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-500">API</p>
-                <p className="mt-3 font-display text-2xl text-white">{health.service}</p>
-                <p className="mt-2 text-sm capitalize text-slate-400">{health.status}</p>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-                <StatCard label="Queued / Active" value={history.filter((scan) => ["queued", "running"].includes(scan.status)).length} tone="text-white" />
-                <StatCard label="Recent Scans" value={history.length} tone="text-white" />
-              </div>
-            </div>
-          </Panel>
-        </header>
-
+        
         <main className="mt-8 grid flex-1 gap-8 xl:grid-cols-[minmax(0,1.35fr)_380px]">
           <div className="space-y-8">
             <Panel
