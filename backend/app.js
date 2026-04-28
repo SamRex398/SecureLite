@@ -1,5 +1,6 @@
 const express = require("express");
 const connDB = require("./config/db");
+const cors = require("cors");
 require("dotenv").config();
 require("./jobs/scanWorker");
 
@@ -7,7 +8,7 @@ const scanRoutes = require("./routes/scanRoutes");
 
 const app = express();
 
-const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173")
+const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173"||"https://samrex398.github.io")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
@@ -31,7 +32,11 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-
+app.use(cors({
+  origin: "https://samrex398.github.io",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 const startApp = async () => {
   await connDB(process.env.Db_Url);
 
