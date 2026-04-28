@@ -40,16 +40,28 @@ function apiUrl(path) {
   return API_BASE_URL ? `${API_BASE_URL}${path}` : path;
 }
 
+function toggleApiPrefix(path) {
+  if (path.startsWith("/api/")) return path.slice(4);
+  return `/api${path}`;
+}
+
 async function request(path, options = {}) {
-  const response = await fetch(apiUrl(path), {
+  const fetchOptions = {
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
     ...options,
-  });
+  };
 
-  const payload = await response.json().catch(() => ({}));
+  let response = await fetch(apiUrl(path), fetchOptions);
+  let payload = await response.json().catch(() => ({}));
+
+  if (response.status === 404) {
+    const fallbackPath = toggleApiPrefix(path);
+    response = await fetch(apiUrl(fallbackPath), fetchOptions);
+    payload = await response.json().catch(() => ({}));
+  }
 
   if (!response.ok) {
     throw new Error(payload.message || "Request failed");
@@ -408,8 +420,6 @@ export default function App() {
             </div>
           </Panel>
 
-
-
           <Panel eyebrow="Operations Snapshot" title="Live posture">
             <div className="space-y-4">
               <div className="rounded-3xl border border-white/10 bg-slate-950/35 p-5">
@@ -604,7 +614,6 @@ export default function App() {
               </div>
             </Panel>
           </div>
-
 
           <aside className="space-y-8 xl:sticky xl:top-8">
             <Panel
