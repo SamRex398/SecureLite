@@ -43,7 +43,7 @@ const startApp = async () => {
   const PORT = process.env.PORT || 6050;
 
   //Routes
-  app.use("/", scanRoutes);
+  app.use("/scan", scanRoutes);
 
   app.listen(PORT, () => {
     console.log(`App running on Port: ${PORT}`);
