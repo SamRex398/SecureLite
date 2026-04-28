@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(cors({
-  origin: "https://samrex398.github.io",
+  origin: "https://securelite-2.onrender.com",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
