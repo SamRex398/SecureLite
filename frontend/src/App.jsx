@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ||  "https://securelite.onrender.com").replace(/\/$/, "");
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 const severityStyles = {
   critical: "bg-rose-500/15 text-rose-200 ring-1 ring-rose-400/40",
@@ -408,6 +408,24 @@ export default function App() {
             </div>
           </Panel>
 
+
+
+          <Panel eyebrow="Operations Snapshot" title="Live posture">
+            <div className="space-y-4">
+              <div className="rounded-3xl border border-white/10 bg-slate-950/35 p-5">
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-500">API</p>
+                <p className="mt-3 font-display text-2xl text-white">{health.service}</p>
+                <p className="mt-2 text-sm capitalize text-slate-400">{health.status}</p>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+                <StatCard label="Queued / Active" value={history.filter((scan) => ["queued", "running"].includes(scan.status)).length} tone="text-white" />
+                <StatCard label="Recent Scans" value={history.length} tone="text-white" />
+              </div>
+            </div>
+          </Panel>
+        </header>
+
+        <main className="mt-8 grid flex-1 gap-8 xl:grid-cols-[minmax(0,1.35fr)_380px]">
           <div className="space-y-8">
             <Panel
               eyebrow="Queue Scan"
@@ -586,23 +604,6 @@ export default function App() {
               </div>
             </Panel>
           </div>
-
-          <Panel eyebrow="Operations Snapshot" title="Live posture">
-            <div className="space-y-4">
-              <div className="rounded-3xl border border-white/10 bg-slate-950/35 p-5">
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-500">API</p>
-                <p className="mt-3 font-display text-2xl text-white">{health.service}</p>
-                <p className="mt-2 text-sm capitalize text-slate-400">{health.status}</p>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-                <StatCard label="Queued / Active" value={history.filter((scan) => ["queued", "running"].includes(scan.status)).length} tone="text-white" />
-                <StatCard label="Recent Scans" value={history.length} tone="text-white" />
-              </div>
-            </div>
-          </Panel>
-        </header>
-
-        <main className="mt-8 grid flex-1 gap-8 xl:grid-cols-[minmax(0,1.35fr)_380px]">
 
 
           <aside className="space-y-8 xl:sticky xl:top-8">
