@@ -76,11 +76,11 @@ export default function ScanForm({ onSubmit, loading, error }) {
           <button
             type="submit"
             disabled={loading || !target.trim()}
-            className="px-5 py-2.5 bg-[#00ff88]/10 border border-[#00ff88]/40 text-[#00ff88]
+            className="px-1.5 py-3.5 bg-[#00ff88]/10 border border-[#00ff88]/40 text-[#00ff88]
                        font-mono text-sm font-semibold tracking-wider rounded-md
                        hover:bg-[#00ff88]/20 hover:border-[#00ff88]/70
                        disabled:opacity-30 disabled:cursor-not-allowed
-                       transition-all duration-200 uppercase"
+                       transition-all duration-200 uppercase w-full"
           >
             {loading ? 'Queuing…' : '[ Scan ]'}
           </button>
