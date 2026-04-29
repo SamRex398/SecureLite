@@ -1,30 +1,61 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const BLOCKED = [
-  { re: /^localhost$/i,                                        msg: 'localhost is not allowed' },
-  { re: /^127\.0\.0\.1$/,                                     msg: '127.0.0.1 is not allowed' },
-  { re: /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/,      msg: 'Private IP addresses are not allowed' },
-  { re: /[\/\-]/,                                              msg: 'CIDR and range inputs are not supported' },
-  { re: /::/,                                                  msg: 'IPv6 is not supported yet' },
+  { re: /^localhost$/i, msg: "localhost is not allowed" },
+  { re: /^127\.0\.0\.1$/, msg: "127.0.0.1 is not allowed" },
+  {
+    re: /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/,
+    msg: "Private IP addresses are not allowed",
+  },
+  { re: /::/, msg: "IPv6 is not supported yet" },
 ];
+
+const CIDR_OR_RANGE =
+  /^(\d{1,3}(\.\d{1,3}){3}\/([0-9]|[1-2][0-9]|3[0-2])|\d{1,3}(\.\d{1,3}){3}\s*-\s*\d{1,3}(\.\d{1,3}){3})$/;
 
 function validate(raw) {
   const v = raw.trim();
-  if (!v) return 'Target is required';
+  if (!v) return "Target is required";
+
+  // Block only real CIDR/range inputs, not normal URLs.
+  if (CIDR_OR_RANGE.test(v)) return "CIDR and range inputs are not supported";
+
+  // If URL, validate hostname only.
+  if (/^https?:\/\//i.test(v)) {
+    try {
+      const host = new URL(v).hostname;
+      for (const { re, msg } of BLOCKED) {
+        if (re.test(host)) return msg;
+      }
+      return null;
+    } catch {
+      return "Invalid target format";
+    }
+  }
+
+  // Non-URL inputs: validate raw text.
   for (const { re, msg } of BLOCKED) {
     if (re.test(v)) return msg;
   }
+
   return null;
 }
 
-export default function ScanForm({ onSubmit, loading, error }) {
-  const [target, setTarget] = useState('');
+export default function ScanForm({ onSubmit, loading, error, clearError }) {
+  const [target, setTarget] = useState("");
   const [localError, setLocalError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (clearError) clearError();
+
     const err = validate(target);
-    if (err) { setLocalError(err); return; }
+    if (err) {
+      setLocalError(err);
+      return;
+    }
+
     setLocalError(null);
     await onSubmit(target.trim());
   };
@@ -34,7 +65,7 @@ export default function ScanForm({ onSubmit, loading, error }) {
   return (
     <div className="panel p-5">
       <div className="flex items-center gap-2 mb-4">
-        <span className="font-mono text-xs text-[#00ff88] opacity-60">{'>'}</span>
+        <span className="font-mono text-xs text-[#00ff88] opacity-60">{">"}</span>
         <span className="font-display font-semibold text-sm tracking-widest uppercase text-slate-400">
           New Scan
         </span>
@@ -45,10 +76,15 @@ export default function ScanForm({ onSubmit, loading, error }) {
           <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
             <span className="text-[#00ff88] opacity-50 font-mono text-sm">$</span>
           </div>
+
           <input
             type="text"
             value={target}
-            onChange={e => { setTarget(e.target.value); setLocalError(null); }}
+            onChange={(e) => {
+              setTarget(e.target.value);
+              setLocalError(null);
+              if (clearError) clearError();
+            }}
             placeholder="https://example.com  ·  hostname  ·  1.2.3.4"
             className="w-full bg-[#080b0f] border border-[#1a2332] rounded-md pl-8 pr-4 py-3
                        font-mono text-sm text-slate-200 placeholder-slate-600
@@ -58,6 +94,7 @@ export default function ScanForm({ onSubmit, loading, error }) {
             disabled={loading}
             autoFocus
           />
+
           {loading && (
             <div className="absolute inset-y-0 right-3 flex items-center">
               <span className="w-4 h-4 border-2 border-[#00ff88]/30 border-t-[#00ff88] rounded-full animate-spin" />
@@ -82,10 +119,11 @@ export default function ScanForm({ onSubmit, loading, error }) {
                        disabled:opacity-30 disabled:cursor-not-allowed
                        transition-all duration-200 uppercase w-full"
           >
-            {loading ? 'Queuing…' : '[ Scan ]'}
+            {loading ? "Queuing…" : "[ Scan ]"}
           </button>
+
           <span className="text-slate-600 text-xs font-mono">
-            {loading ? 'Adding to queue…' : 'URL · hostname · public IPv4'}
+            {loading ? "Adding to queue…" : "URL · hostname · public IPv4"}
           </span>
         </div>
       </form>

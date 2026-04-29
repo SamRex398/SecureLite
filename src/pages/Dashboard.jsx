@@ -72,7 +72,7 @@ export default function Dashboard() {
 
         {/* Left column */}
         <div className="flex flex-col gap-4">
-          <ScanForm onSubmit={handleSubmit} loading={creating} error={createError} />
+          <ScanForm onSubmit={handleSubmit} loading={creating} error={createError} clearError={clearError}/>
           <ScanHistoryList
             items={history}
             loading={histLoading}
