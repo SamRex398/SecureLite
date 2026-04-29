@@ -10,6 +10,18 @@ const IPV4_CIDR_REGEX =
 const IPV4_RANGE_REGEX =
   /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}\s*-\s*(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
 
+const isPrivateIPv4 = (hostname) => {
+  const parts = hostname.split(".").map(Number);
+  if (parts.length !== 4 || parts.some(Number.isNaN)) return false;
+
+  const [a, b] = parts;
+  if (a === 10) return true;
+  if (a === 127) return true;
+  if (a === 192 && b === 168) return true;
+  if (a === 172 && b >= 16 && b <= 31) return true;
+  return false;
+};
+
 const isRangeInput = (input) => {
   const value = String(input || "").trim();
   return IPV4_CIDR_REGEX.test(value) || IPV4_RANGE_REGEX.test(value);
@@ -35,6 +47,22 @@ const detectTargetType = (input) => {
   return "invalid";
 };
 
+const normalizeTarget = (input, targetType) => {
+  const value = input.trim();
+
+  if (targetType === "url") {
+    const parsed = new URL(value);
+    if (parsed.pathname === "/") parsed.pathname = "";
+    return parsed.toString();
+  }
+
+  if (targetType === "hostname" || targetType === "ip") {
+    return `https://${value.toLowerCase()}`;
+  }
+
+  return value;
+};
+
 const validateTarget = (input) => {
   if (!input || typeof input !== "string" || !input.trim()) {
     return { valid: false, reason: "Target is required", targetType: "invalid" };
@@ -54,7 +82,6 @@ const validateTarget = (input) => {
   const parsed = new URL(normalizedTarget);
   const host = parsed.hostname.toLowerCase();
 
-  // Check CIDR/range against host only (prevents URL false positives)
   if (isRangeInput(host)) {
     return {
       valid: false,
@@ -82,11 +109,14 @@ const validateTarget = (input) => {
   return { valid: true, reason: null, targetType, normalizedTarget, host };
 };
 
-
-// Add this function
-const getTargetInput = (body) => {
-  return body?.target || body?.url || '';
+const getTargetInput = (body = {}) => {
+  return body.target || body.url || "";
 };
 
-// Update your exports at the bottom
-module.exports = { validateTarget, getTargetInput };
+module.exports = {
+  validateTarget,
+  getTargetInput,
+  detectTargetType,
+  normalizeTarget,
+  isPrivateIPv4,
+};
