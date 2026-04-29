@@ -81,3 +81,12 @@ const validateTarget = (input) => {
 
   return { valid: true, reason: null, targetType, normalizedTarget, host };
 };
+
+
+// Add this function
+const getTargetInput = (body) => {
+  return body?.target || body?.url || '';
+};
+
+// Update your exports at the bottom
+module.exports = { validateTarget, getTargetInput };
